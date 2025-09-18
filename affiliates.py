@@ -1,136 +1,173 @@
 # =============================
-# archivo: affiliates.py  (PARA implementar por estudiantes)
-# Interfaz (contrato) usada por eps_server.py
-# Persistencia en CSV: affiliates.csv, surveys.csv
+# archivo: affiliates.py 
+# uso de arcivos CSV: affiliates.csv, surveys.csv
+# Gestiona:
+#  A) Afiliados y encuestas en CSV 
+#  B) Usuarios con roles/sesión en JSONL (users.txt)
+# =============================
+# =============================
+# archivo: affiliates.py
+# Estudiantes: COMPLETAR funciones indicadas con "ESTUDIANTES"
+# Reglas:
+# - Afiliados y encuestas en CSV (affiliates.csv, surveys.csv)
+# - Usuarios (name, password, role, session) en JSON por línea (users.txt)
+# - Formatos:
+#     birth -> "dd/mm/yyyy"
+#     plan  -> "A" | "B" | "C"
+#     gender-> "M" | "F" | "X"
+#     rating-> entero 1..5
+# - Retornos de funciones: usar strings exactos indicados
 # =============================
 
-import csv
 import os
+import csv
+import json
 from datetime import datetime, date
-from statistics import mean
 
-AFF_FILE = "affiliates.csv"
-SURV_FILE = "surveys.csv"
+# ---------- Archivos de datos ----------
+AFF_FILE = "affiliates.csv"     # columnas: id,names,surnames,birth,plan,gender,email
+SURV_FILE = "surveys.csv"       # columnas: id,rating
+USERS_FILE = "users.txt"        # JSONL: {"name","password","role","session"}
 
-# ---------- utilidades de archivo ----------
-
-def _ensure_files():
-    if not os.path.exists(AFF_FILE):
-        with open(AFF_FILE, "w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
-            w.writerow(["id", "names", "surnames", "birth", "plan", "gender", "email"])  # dd/mm/yyyy
-    if not os.path.exists(SURV_FILE):
-        with open(SURV_FILE, "w", newline="", encoding="utf-8") as f:
-            w = csv.writer(f)
-            w.writerow(["id", "rating"])  # rating: 1..5
-
+# ---------- Utilidades sugeridas (opcionales para el estudiante) ----------
+def _ensure_aff_files():
+    """Crea los CSV si no existen (con sus cabeceras)."""
+    # ESTUDIANTES: si no existe AFF_FILE, crearlo y escribir cabecera
+    # ESTUDIANTES: si no existe SURV_FILE, crearlo y escribir cabecera
+    pass
 
 def _read_affiliates():
-    _ensure_files()
-    with open(AFF_FILE, "r", newline="", encoding="utf-8") as f:
-        r = csv.DictReader(f)
-        return list(r)
-
+    """Lee ESTUDIANTESs los afiliados del CSV y retorna lista de dicts."""
+    # ESTUDIANTES: abrir AFF_FILE y usar csv.DictReader
+    pass
 
 def _write_affiliates(rows):
-    with open(AFF_FILE, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["id", "names", "surnames", "birth", "plan", "gender", "email"])
-        w.writeheader()
-        for row in rows:
-            w.writerow(row)
-
+    """Sobrescribe el CSV de afiliados con la lista 'rows'."""
+    # ESTUDIANTES: abrir AFF_FILE y usar csv.DictWriter con cabeceras
+    pass
 
 def _read_surveys():
-    _ensure_files()
-    with open(SURV_FILE, "r", newline="", encoding="utf-8") as f:
-        r = csv.DictReader(f)
-        return list(r)
-
+    """Lee todas las encuestas del CSV y retorna lista de dicts."""
+    # ESTUDIANTES
+    pass
 
 def _write_surveys(rows):
-    with open(SURV_FILE, "w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=["id", "rating"])
-        w.writeheader()
-        for row in rows:
-            w.writerow(row)
+    """Sobrescribe el CSV de encuestas con la lista 'rows'."""
+    # ESTUDIANTES
+    pass
 
+def _ensure_users():
+    """Crea users.txt si no existe."""
+    # ESTUDIANTES
+    pass
+
+def _load_users():
+    """Lee users.txt (JSON por línea) y retorna lista de dicts."""
+    # ESTUDIANTES: por cada línea no vacía, json.loads y agregar a una lista
+    pass
+
+def _rewrite_users(rows):
+    """Sobrescribe users.txt con una línea JSON por usuario."""
+    # ESTUDIANTES: por cada dict en rows escribir json.dumps(...) + "\n"
+    pass
+
+def _find_user(rows, name):
+    """Busca un usuario por name en la lista rows."""
+    # ESTUDIANTES: recorrer y comparar u["name"] == name
+    pass
 
 def _parse_date_ddmmyyyy(s):
+    """Convierte 'dd/mm/yyyy' a objeto date. Levanta excepción si no cumple formato."""
     return datetime.strptime(s, "%d/%m/%Y").date()
 
-
-def _age(birth_date: date) -> int:
+def _age(birth_date):
+    """Calcula edad (entero) dada una fecha de nacimiento."""
     today = date.today()
     years = today.year - birth_date.year
     if (today.month, today.day) < (birth_date.month, birth_date.day):
         years -= 1
     return years
 
-# ---------- funciones del contrato ----------
+# ---------- Validaciones básicas ----------
+def _valid_plan(p): return p in ("A", "B", "C")
+def _valid_gender(g): return g in ("M", "F", "X")
+def _valid_email(e):
+    return isinstance(e, str) and ("@" in e) and ("." in e.split("@")[-1])
 
-# body: {id, names, surnames, birth(dd/mm/yyyy), plan(A|B|C), gender(M|F|X), email}
-# retorna "ok" o mensaje de error (string)
-
-def register_affiliate(body):
-    # TODO: validar campos (no vacíos), unicidad de id, formato de fecha, plan/gender válidos, email con "@"
-    # TODO: guardar en AFF_FILE
-    # Reglas de error sugeridas: "invalid data", "id already exists", "invalid date format"
-    return "TODO"
+# ===============  API DE AFILIADOS  ===================
 
 
-# retorna lista de dicts ordenada por apellidos ASC
+def registerAffiliate(_id, names, surnames, birth, plan, gender, email):
+   
+    # ESTUDIANTES:
+    # 1) Validar que ningún campo esté vacío (strings con strip()).
+    # 2) Intentar parsear birth con _parse_date_ddmmyyyy; si falla -> "invalid date format".
+    # 3) Validar plan/gender/email; si falla -> "invalid data".
+    # 4) Leer afiliados y verificar que el id NO exista -> si existe -> "id already exists".
+    # 5) Agregar nuevo dict y escribir el CSV.
+    pass
 
-def list_affiliates():
-    # TODO: leer archivo y ordenar por "surnames" (casefold)
-    return []
+def listAffiliates():
+   
+    # ESTUDIANTES: leer CSV, ordenar por apellidos (minúsculas), retornar lista
+    pass
 
-
-# retorna dict del afiliado o None
-
-def search_by_id(_id):
-    # TODO: buscar por id exacto
-    return None
-
-
-# retorna: {
-#   "total_by_plan": {"A": n, "B": n, "C": n},
-#   "avg_age_by_gender": {"M": x, "F": y, "X": z},
-#   "min_age": a, "max_age": b
-# }
+def searchById(_id):
+ 
+    # ESTUDIANTES: recorrer lectura y retornar el que coincida
+    pass
 
 def stats():
-    # TODO: calcular a partir de archivo AFF_FILE
-    return {
-        "total_by_plan": {"A": 0, "B": 0, "C": 0},
-        "avg_age_by_gender": {"M": 0, "F": 0, "X": 0},
-        "min_age": 0,
-        "max_age": 0,
-    }
+  
+    # ESTUDIANTES:
+    # - Recorrer afiliados, acumular por plan
+    # - Calcular edades con _age(parse de birth)
+    # - Promedio por gender (si no hay datos, 0.0)
+    pass
+
+def exportCsv():
+    # ESTUDIANTES: llamar a _ensure_aff_files()
+    pass
+
+def recordSurvey(_id, rating):
+ 
+    # ESTUDIANTES:
+    # - Validar id
+    # - Verificar afiliado existe
+    # - Validar rating entero en 1..5
+    # - Agregar fila al CSV de encuestas
+    pass
+
+def surveyStats(segment_by=None):
+
+    # ESTUDIANTES:
+    # - Leer afiliados y encuestas
+    # - Ignorar ratings fuera de 1..5
+    # - Si segment_by en {"plan","gender"} construir promedios por segmento
+    pass
 
 
-# exporta (reescribe) AFF_FILE tal cual; aquí sirve para respetar el endpoint /export
-
-def export_csv():
-    # TODO: si decides mantener el mismo archivo como fuente y destino, basta con verificar que exista
-    _ensure_files()
+# ===============  API DE USUARIOS  ====================
 
 
-# body: {id, rating(1..5)} -> "ok" o error
+def registerUser(name, password, role):
 
-def record_survey(body):
-    # TODO: validar: id existente, rating entre 1 y 5, guardar en SURV_FILE (append)
-    return "TODO"
+    # ESTUDIANTES:
+    # - Validar no vacíos
+    # - Validar role permitido
+    # - Leer users.txt y verificar que no exista name
+    # - Agregar {"name", "password", "role", "session": False}
+    pass
 
+def openCloseSession(name, password, flag):
 
-# segment_by: None | "plan" | "gender"
-# retorna: {
-#   "count": n,
-#   "avg_rating": x,
-#   "by_segment": {"A": {"count":.., "avg_rating":..}, ...}  # si aplica
-# }
+    # ESTUDIANTES:
+    # - Validar no vacíos
+    # - Cargar usuarios, buscar por name y verificar password
+    # - Actualizar campo "session" con bool(flag)
+    pass
 
-def survey_stats(segment_by=None):
-    # TODO: combinar AFF_FILE y SURV_FILE por id
-    return {"count": 0, "avg_rating": 0.0, "by_segment": {}}
+def findUser(name):
 
-
+    # ESTUDIANTES: cargar lista y buscar por name
+    pass
