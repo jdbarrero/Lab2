@@ -1,47 +1,94 @@
 # =============================
-# archivo: eps_client.py  (NO modificar)
-# Cliente de línea de comandos para probar el servidor EPS
+# archivo: eps_client.py  (estilo simple, urlencoded)
 # Requiere: pip install requests
 # =============================
 
+
 import requests
-import json
 
-BASE = "http://localhost:8080"
+HEADERS = {"Content-Type": "application/x-www-form-urlencoded"}
 
-def pretty(x):
-    print(json.dumps(x, ensure_ascii=False, indent=2))
+# ---------- Salud ----------
+def health(url):
+    response = requests.get(url + "/health")
+    return response.content.decode("utf-8", errors="replace")
 
-def health():
-    pretty(requests.get(BASE+"/health").json())
+# ---------- Usuarios (roles/sesión) ----------
+def registerUser(url, name, password, role):
+    body = f"name={name}&password={password}&role={role}"
+    response = requests.post(url + "/user/register", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
 
-def register(sample):
-    pretty(requests.post(BASE+"/register", json=sample).json())
+def openSession(url, name, password):
+    body = f"name={name}&password={password}&flag=true"
+    response = requests.post(url + "/user/session", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
 
-def list_all():
-    pretty(requests.get(BASE+"/list").json())
+def closeSession(url, name, password):
+    body = f"name={name}&password={password}&flag=false"
+    response = requests.post(url + "/user/session", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
 
-def search(_id):
-    pretty(requests.get(BASE+"/search", params={"id": _id}).json())
+# ---------- Citas médicas ----------
+def scheduleAppointment(url, patient, password, doctor, date_ddmmyyyy, time_hhmm):
+    body = f"patient={patient}&password={password}&doctor={doctor}&date={date_ddmmyyyy}&time={time_hhmm}"
+    response = requests.post(url + "/appointment/schedule", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
 
-def stats():
-    pretty(requests.get(BASE+"/stats").json())
+def listAppointments(url, name, password):
+    # GET con query en la URL (mismo estilo simple)
+    response = requests.get(url + f"/appointment/list?name={name}&password={password}")
+    return response.content.decode("utf-8", errors="replace")
 
-def export():
-    pretty(requests.post(BASE+"/export").json())
+def cancelAppointment(url, patient, password, appt_id):
+    body = f"patient={patient}&password={password}&id={appt_id}"
+    response = requests.post(url + "/appointment/cancel", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
 
-def survey(_id, rating):
-    pretty(requests.post(BASE+"/survey", json={"id": _id, "rating": rating}).json())
+# ---------- Prescripciones ----------
+def createPrescription(url, doctor, password, patient, appt_id, text):
+    body = f"doctor={doctor}&password={password}&patient={patient}&appt_id={appt_id}&text={text}"
+    response = requests.post(url + "/prescription/create", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
 
-def survey_stats(segment_by=None):
-    pretty(requests.get(BASE+"/survey_stats", params={"segment_by": segment_by} if segment_by else None).json())
+def listPrescriptions(url, role, name, password):
+    response = requests.get(url + f"/prescription/list?role={role}&name={name}&password={password}")
+    return response.content.decode("utf-8", errors="replace")
 
-if __name__ == "__main__":
-    health()
-    register({
-        "id":"1010", "names":"Ana", "surnames":"García", "birth":"12/03/1999",
-        "plan":"A", "gender":"F", "email":"ana@example.com"
-    })
-    list_all(); search("1010"); stats(); survey("1010",5); survey_stats("plan"); export()
+# ---------- Afiliados / Encuestas (como el lab original) ----------
+def registerAffiliate(url, _id, names, surnames, birth, plan, gender, email):
+    body = f"id={_id}&names={names}&surnames={surnames}&birth={birth}&plan={plan}&gender={gender}&email={email}"
+    response = requests.post(url + "/register", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
+
+def listAffiliates(url):
+    response = requests.get(url + "/list")
+    return response.content.decode("utf-8", errors="replace")
+
+def searchAffiliate(url, _id):
+    response = requests.get(url + f"/search?id={_id}")
+    return response.content.decode("utf-8", errors="replace")
+
+def stats(url):
+    response = requests.get(url + "/stats")
+    return response.content.decode("utf-8", errors="replace")
+
+def recordSurvey(url, _id, rating):
+    body = f"id={_id}&rating={rating}"
+    response = requests.post(url + "/survey", data=body, headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
+
+def surveyStats(url, segment_by=None):
+    if segment_by:
+        response = requests.get(url + f"/survey_stats?segment_by={segment_by}")
+    else:
+        response = requests.get(url + "/survey_stats")
+    return response.content.decode("utf-8", errors="replace")
+
+def exportCsv(url):
+    response = requests.post(url + "/export", data="", headers=HEADERS)
+    return response.content.decode("utf-8", errors="replace")
+
+
 
 
