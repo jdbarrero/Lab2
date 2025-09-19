@@ -33,12 +33,11 @@ El servidor permite:
 También se suministran el cliente y dos pruebas de ejemplo:
 
 * Cliente (no modificar): [`eps_client.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_client.py)
-* Pruebas (pueden modificarse por el equipo):
+* Pruebas (pueden modificarse por los estudiantes - no es necesario):
+* [`test_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_client.py) – flujo de **usuarios + afiliados + encuestas**.
+* [`test_medical_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_medical_client.py) – flujo **paciente–doctor → cita → prescripción**.
 
 ![Edicion](https://github.com/jdbarrero/Lab2/blob/main/Edicion.png)
-
-  * [`test_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_client.py) – flujo de **usuarios + afiliados + encuestas**.
-  * [`test_medical_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_medical_client.py) – flujo **paciente–doctor → cita → prescripción**.
 
 Para que [`eps_client.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_client.py) pueda funcionar correctamente se debe instalar la librería de solicitudes de Python ejecutando el siguiente comando en una terminal:
 `python -m pip install requests`
