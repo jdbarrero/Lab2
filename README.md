@@ -11,7 +11,7 @@ En ese sentido, la práctica de laboratorio contempla la creación y prueba de f
 **Código base suministrado**
 Se suministra el código base del servidor en el archivo [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py) el cual contiene toda la funcionalidad para que éste opere dentro de una red de área local o en el mismo equipo de prueba. Este archivo no debe ser modificado bajo ninguna circunstancia.
 
-El archivo `eps_server.py` usa los módulos [`affiliates.py`](https://github.com/jdbarrero/Lab2/blob/main/affiliates.py) y [`clinical.py`](https://github.com/jdbarrero/Lab2/blob/main/clinical.py), que incluyen definiciones de funciones a implementar de acuerdo con los comentarios en cada archivo. La implementación y el correcto funcionamiento de estas funciones determinan la evaluación de esta práctica de laboratorio y el lado del servidor del proyecto.
+El archivo [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py) usa los módulos [`affiliates.py`](https://github.com/jdbarrero/Lab2/blob/main/affiliates.py) y [`clinical.py`](https://github.com/jdbarrero/Lab2/blob/main/clinical.py), que incluyen definiciones de funciones a implementar de acuerdo con los comentarios en cada archivo. La implementación y el correcto funcionamiento de estas funciones determinan la evaluación de esta práctica de laboratorio y el lado del servidor del proyecto.
 
 El servidor permite:
 
@@ -36,13 +36,13 @@ También se suministran el cliente y dos pruebas de ejemplo:
   * [`test_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_client.py) – flujo de **usuarios + afiliados + encuestas**.
   * [`test_medical_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_medical_client.py) – flujo **paciente–doctor → cita → prescripción**.
 
-Para que `eps_client.py` pueda funcionar correctamente se debe instalar la librería de solicitudes de Python ejecutando el siguiente comando en una terminal:
+Para que [`eps_client.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_client.py) pueda funcionar correctamente se debe instalar la librería de solicitudes de Python ejecutando el siguiente comando en una terminal:
 `python -m pip install requests`
 
 **¿Cómo realizar las pruebas?**
-Primero ejecute el programa ** [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py) **; la recomendación es verificar el correcto funcionamiento de las funciones, una a la vez. Posteriormente se pueden ejecutar los programas `test_client.py` y `test_medical_client.py`; en caso de que se muestren ventanas emergentes de Windows solicitando permisos, por favor otorgarlos ya que los programas hacen uso de los servicios de red.
+Primero ejecute el programa  [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py) ; la recomendación es verificar el correcto funcionamiento de las funciones, una a la vez. Posteriormente se pueden ejecutar los programas `test_client.py` y `test_medical_client.py`; en caso de que se muestren ventanas emergentes de Windows solicitando permisos, por favor otorgarlos ya que los programas hacen uso de los servicios de red.
 
-Tenga en cuenta que es posible que `eps_server.py`, `test_client.py` y `test_medical_client.py` se ejecuten en computadoras diferentes siempre y cuando los equipos se encuentren conectados a la misma red LAN cableada o inalámbrica. En ese caso basta con consultar la dirección IP del computador que está ejecutando ** [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py) ** mediante el comando `ipconfig`, como se muestra en la siguiente figura:
+Tenga en cuenta que es posible que [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py), [`test_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_client.py) y [`test_medical_client.py`](https://github.com/jdbarrero/Lab2/blob/main/test_medical_client.py) se ejecuten en computadoras diferentes siempre y cuando los equipos se encuentren conectados a la misma red LAN cableada o inalámbrica. En ese caso basta con consultar la dirección IP del computador que está ejecutando ** [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py) ** mediante el comando `ipconfig`, como se muestra en la siguiente figura:
 
 ![Configurar IP](https://github.com/jdbarrero/Lab2/blob/main/CONFIG.png)
 
