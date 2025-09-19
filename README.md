@@ -13,6 +13,8 @@ Se suministra el código base del servidor en el archivo [`eps_server.py`](https
 
 El archivo [`eps_server.py`](https://github.com/jdbarrero/Lab2/blob/main/eps_server.py) usa los módulos [`affiliates.py`](https://github.com/jdbarrero/Lab2/blob/main/affiliates.py) y [`clinical.py`](https://github.com/jdbarrero/Lab2/blob/main/clinical.py), que incluyen definiciones de funciones a implementar de acuerdo con los comentarios en cada archivo. La implementación y el correcto funcionamiento de estas funciones determinan la evaluación de esta práctica de laboratorio y el lado del servidor del proyecto.
 
+![Demostracion](https://github.com/jdbarrero/Lab2/blob/main/Demostracion.png)
+
 El servidor permite:
 
 * **Afiliados y encuestas**
