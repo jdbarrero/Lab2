@@ -1,4 +1,4 @@
-**Laboratorio 2: Servidor de Afiliados, Encuestas, Citas y Prescripciones (RA 1, RA 3, RA 4)**
+**Laboratorio 2: Servidor de Afiliados, Encuestas, Citas y Prescripciones (RA 1, RA2, RA 3, RA 4)**
 Programación, II-2025
 Uniquindío
 
